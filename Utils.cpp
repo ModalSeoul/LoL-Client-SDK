@@ -8,19 +8,26 @@
 using namespace std;
 
 // TODO(algernon@teknik.io): WHY DOES THIS NOT WORK FUCK(make this work)
-DWORD Utils::IterateProcessMemory(HANDLE hProc, DWORD baseAddress, DWORD offsets[], int depth)
+DWORD Utils::IterateProcessMemory(HANDLE hProc, DWORD baseAddress, DWORD offsets[])
 {
+	DWORD currentAddress = baseAddress;
 	DWORD aTemp;
-	vector<DWORD> historicals;
-	for (int i = 0; i <= depth; i++) {
-		if (i == 0) {
-			ReadProcessMemory(hProc, (LPVOID)0x016B6B00, &aTemp, sizeof(aTemp), NULL);
+	std::vector<DWORD> historicals;
+	std::cout << "BaseAddress: 0x" << std::hex << baseAddress << std::endl;
+	for (int i = 0; i < sizeof(offsets); i++)
+	{
+		if (i == 0)
+		{
+			ReadProcessMemory(hProc, (LPVOID)currentAddress, &aTemp, sizeof(aTemp), NULL);
 			historicals.push_back(aTemp);
+			std::cout << "Points to: 0x" << std::hex << historicals[i] << std::endl;
+			continue;
 		}
-		ReadProcessMemory(hProc, (LPVOID)(DWORD)(historicals[i] + offsets[i]), &aTemp, sizeof(aTemp), NULL);
+		ReadProcessMemory(hProc, (LPVOID)(aTemp + offsets[i - 1]), &aTemp, sizeof(aTemp), NULL);
 		historicals.push_back(aTemp);
-		cout << offsets[i] << endl << historicals[i] << endl;
+		std::cout << "With offset 0x" << std::hex << offsets[i - 1] << std::endl << " -> Points to: 0x" << std::hex << historicals[i - 1] + offsets[i - 1] << std::endl;
 	}
+	std::cout << "Value pointed to by pointer chain: 0x" << std::hex << aTemp << std::endl;
 	return aTemp;
 }
 

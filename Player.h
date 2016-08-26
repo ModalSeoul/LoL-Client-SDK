@@ -14,6 +14,7 @@ public:
 	float GetCurrentHealth();
 	void SetDynamic(DWORD address) { l_dDynamic = address; }
 	DWORD GetDynamic()			   { return l_dDynamic;	   }
+	DWORD GetBase()				   { return l_dBase;       }
 };
 
 #endif

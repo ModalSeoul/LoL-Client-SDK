@@ -5,7 +5,7 @@
 
 class Utils {
 public:	
-	DWORD IterateProcessMemory(HANDLE hProc, DWORD baseAddress, DWORD offsets[], int depth);
+	DWORD IterateProcessMemory(HANDLE hProc, DWORD baseAddress, DWORD offsets[]);
 	HANDLE Process;
 	HANDLE GetProcess();
 	void SetProcess(HANDLE hProcess) {
